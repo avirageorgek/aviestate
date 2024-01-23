@@ -76,7 +76,7 @@ const SignUp = () => {
             setLoading(false);
             navigate("/sign-in");
         },
-      });
+    });
 
     return (
         <div className="p-3 max-w-lg mx-auto">
