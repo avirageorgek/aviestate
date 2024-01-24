@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+
+import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
 
 const SignIn = () => {
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    //const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({});
-    const [errorMessage, setErrorMessage] = useState("");
+    //const [errorMessage, setErrorMessage] = useState("");
+    const {loading, error} = useSelector((state) => { return state.user });
     const onChangeHandler = (e) => {
         setFormData({
             ...formData,
@@ -14,23 +21,29 @@ const SignIn = () => {
 
     const signInHandler = async (e) => {
         e.preventDefault();
-        const result = await fetch("/api/auth/signin", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-
-        const data = await result.json();
-
-        if(data.success === false) {
-            setErrorMessage(data.message);
+        try {
+            dispatch(signInStart());
+            const result = await fetch("/api/auth/signin", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+    
+            const data = await result.json();
+            if(data.success === false) {
+                dispatch(signInFailure(data.message));
+                return;
+            }
+    
+            dispatch(signInSuccess(data.data));
+            //setLoading(false);
+            navigate("/profile");
+        } catch(err) {
+            dispatch(signInFailure(data.message));
             return;
         }
-
-        navigate("/profile");
-
 
     }
 
@@ -48,7 +61,7 @@ const SignIn = () => {
                 </div>
                 <button className="text-white p-3 rounded-lg bg-slate-700 hover:opacity-90">Sign In</button>
             </form>
-            {errorMessage ? <p className="text-red-500 my-2">{errorMessage}</p> : ""}
+            {error ? <p className="text-red-500 my-2">{error}</p> : ""}
 
             <p className="my-3">Don't have an account? <span className="text-blue-600 font-bold"><Link to="/sign-up">Sign Up</Link></span></p>
         </div>
