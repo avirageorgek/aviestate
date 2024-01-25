@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
 import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
 
@@ -60,6 +61,7 @@ const SignIn = () => {
                     id="password" name="password" placeholder="Password" onChange={onChangeHandler} />
                 </div>
                 <button className="text-white p-3 rounded-lg bg-slate-700 hover:opacity-90">Sign In</button>
+                <OAuth />
             </form>
             {error ? <p className="text-red-500 my-2">{error}</p> : ""}
 
