@@ -27,6 +27,7 @@ const OAuth = () => {
             })
             const registerResult = await registerData.json();
             if(registerResult.success) {
+                registerResult.data.loginType = "google";
                 dispatch(signInSuccess(registerResult.data));
                 navigate("/profile");
             } else {

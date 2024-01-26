@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "https://tmpfiles.nohat.cc/visualhunter-c6a963c5e9.png"
+        default: "https://www.gravatar.com/avatar/?d=mp"
     }
 }, {timestamps: true});
 
