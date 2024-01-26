@@ -21,7 +21,7 @@ export const updateProfile = async (req, res, next) => {
         if(password) {
            password = bcrypt.hashSync(password, 10);
         }
-        console.log("Test", password)
+   
         const updateStatus = await UserModel.findByIdAndUpdate(req.user.id, {
             $set : {
                 username, email, password, avatar
