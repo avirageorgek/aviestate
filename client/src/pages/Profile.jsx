@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {updateStart, updateFailure, updateSuccess} from "../redux/user/userSlice";
+import {updateStart, updateFailure, updateSuccess, 
+    signOutSuccess, signOutFailure, deleteSuccess, deleteFailure} from "../redux/user/userSlice";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {app} from "../../firebase";
 import { useFormik, useFormikContext } from 'formik';
@@ -109,6 +110,36 @@ const Profile = () => {
             
     }
 
+    const deleteProfileHandler = async () => {
+        try {
+            await fetch(`/api/user/delete/${user.currentUser._id}`, {
+                method: "DELETE"
+            });
+
+            dispatch(deleteSuccess());
+            setErrorMessage("");
+
+        } catch(err) {
+            setFileUploadError("");
+            dispatch(deleteFailure("An error occured while deleting your profile"));
+            setErrorMessage("An error occured while deleteing your profile.");
+        }
+    }
+
+    const signOutHandler = async () => {
+        try {
+            let result = await fetch(`/api/user/signOut/${user.currentUser._id}`);
+
+            dispatch(signOutSuccess());
+            setErrorMessage("");
+
+        } catch(err) {
+            setFileUploadError("");
+            dispatch(signOutFailure("An error occured while signing you out"));
+            setErrorMessage("An error occured while signing you out");
+        }
+    }
+
     return (
         <>
             <div className="mx-auto max-w-lg p-3">
@@ -159,6 +190,12 @@ const Profile = () => {
                     {errorMessage ? <p className="text-red-700">{errorMessage}</p> : ""}
                     {updateStatus ? <p className="text-green-700">Successfully updated </p> : ""}
                 </form>
+                <div className="flow-root mt-3">
+                    <p className="float-left text-red-700" onClick={deleteProfileHandler}> Delete profile</p>
+                    <p className="float-right text-red-700" onClick={signOutHandler}> SignOut</p>  
+                </div>
+                
+
             </div>    
         </>    
     );

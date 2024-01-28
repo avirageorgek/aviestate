@@ -38,3 +38,36 @@ export const updateProfile = async (req, res, next) => {
         next(errorHandler(500, "An error occured while updating profile."));
     }
 }
+
+export const deleteUser = async (req, res, next) => {
+    if(req.user.id !== req.params.id) return next(errorHandler("You can only delete your own account"));
+    try {
+        const result = await UserModel.findByIdAndDelete(req.params.id);
+        
+        res.clearCookie("access_token");
+        return res.status(200).json({
+            success: true,
+            message: "Successfully deleted",
+            data: null
+        });
+
+    } catch(err) {
+        next(errorHandler(500, "An error occured while trying to delete user"));
+    }
+}
+
+export const signOutUser = (req, res, next) => {
+    if(req.user.id !== req.params.id) return next(errorHandler("You can only delete your own account"));
+    console.log("Signout user");
+    try {
+        res.clearCookie("access_token");
+        return res.status(200).json({
+            success: true,
+            message: "Successfully deleted",
+            data: null
+        });
+    } catch(err) {
+
+        next(errorHandler(500, "Failed to Sign out"));
+    }
+}
