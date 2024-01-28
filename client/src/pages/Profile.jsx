@@ -46,6 +46,7 @@ const Profile = () => {
             
             dispatch(updateStart());
             try {
+                
                 const updateResult =  await fetch(`/api/user/update/${user.currentUser._id}`, {
                     method: "POST",
                     headers: {
@@ -58,6 +59,7 @@ const Profile = () => {
                 if(updateResultData.success) {
                    
                     dispatch(updateSuccess(updateResultData.data));
+                    setErrorMessage("");
                     setUpdateStatus(true)
                 } else {
                     setErrorMessage("Failed to update user");

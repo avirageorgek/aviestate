@@ -1,7 +1,5 @@
 import {errorHandler} from "../util/error.js";
-
 import UserModel from "../models/user.model.js";
-
 import bcrypt from "bcrypt";
 
 export const test = (req, res) => {
@@ -11,23 +9,23 @@ export const test = (req, res) => {
 
 export const updateProfile = async (req, res, next) => {
     try {
-        if(!req.user.id) return next(errorHandler(400, "Bad request"));
+        if(req.user.id !== req.params.id) return next(errorHandler(400, "You can only update your own account"));
 
-        let {username, email, password = null, avatar} = req.body;
-        if(!username || !email) {
-            next(errorHandler(400, "Bad request"));
+        const updatedUserObj = {
+            username: req.body.username, 
+            email: req.body.email, 
+            avatar: req.body.avatar
         }
-
-        if(password) {
-           password = bcrypt.hashSync(password, 10);
+        if(req.body.password) {
+            req.body.password = bcrypt.hashSync(req.body.password, 10);
+            updatedUserObj.password = req.body.password
         }
    
         const updateStatus = await UserModel.findByIdAndUpdate(req.user.id, {
-            $set : {
-                username, email, password, avatar
-            }    
+            $set : updatedUserObj   
         }, {new: true});
         const {password: pass, ...rest} = updateStatus._doc; 
+        
         if(updateStatus) {
             return res.status(200).json({
                 success:true,
@@ -36,7 +34,7 @@ export const updateProfile = async (req, res, next) => {
             });
         }
     } catch(err) {
-        console.log(err);
+        
         next(errorHandler(500, "An error occured while updating profile."));
     }
 }
