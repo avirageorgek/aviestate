@@ -1,2 +1,4 @@
-.env
+dev.env
+test.env
 node_modules
+client/.env
