@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import Listing from "../../backend/models/listing.model";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/listing" element={<Listing />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,9 +1,24 @@
 import {Link} from "react-router-dom";
 
 import {FaSearch} from "react-icons/fa";
-
+import {useSelector, useDispatch} from "react-redux";
+import {signOutSuccess, signOutFailure} from "../redux/user/userSlice";
 
 export default function Header() {
+    const dispatch = useDispatch();
+    const user = useSelector((state) => {
+        return state.user;
+    });
+
+    const signOutHandler = async () => {
+        try {
+            let result = await fetch(`/api/user/signOut/${user.currentUser._id}`);
+            dispatch(signOutSuccess());
+        } catch(err) {
+            dispatch(signOutFailure("An error occured while signing you out"));
+        }
+    }
+
     return (
         <header className="bg-slate-200 shadow-md">
             <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -28,11 +43,18 @@ export default function Header() {
                             About
                         </li>
                     </Link>
-                    <Link to="sign-in">
-                        <li className="sm:inline text-slate-700">
-                            SignIn
-                        </li>
-                    </Link>   
+                    {
+                        user.currentUser ? 
+                        <li onClick={signOutHandler} className="sm:inline text-slate-700">
+                            Logout
+                        </li>    
+                        : 
+                        <Link to="sign-in">
+                            <li className="sm:inline text-slate-700">
+                                Signin
+                            </li>
+                        </Link>  
+                    }
                 </ul>
             </div>    
         </header>
