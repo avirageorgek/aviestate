@@ -5,3 +5,9 @@
 body {
     background-color: rgb(241,238,221);
 }
+
+.loader-gif {
+    margin-top: 1rem;
+    height: 20px;
+    width: 20px;
+} 

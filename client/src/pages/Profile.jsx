@@ -6,6 +6,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import {app} from "../../firebase";
 import { useFormik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
+import { Link } from "react-router-dom";
 
 const Profile = () => {
 
@@ -189,6 +190,13 @@ const Profile = () => {
                     <button type="submit" disabled={user.currentUser.loginType === "google" ? true: (!(formik.isValid ))} className="rounded-lg border p-3 bg-slate-700 text-white disabled:opacity-70">Update Profile</button>
                     {errorMessage ? <p className="text-red-700">{errorMessage}</p> : ""}
                     {updateStatus ? <p className="text-green-700">Successfully updated </p> : ""}
+                    
+                    <button type="button" className="rounded-lg p-3 text-white bg-green-800 w-auto">
+                        <Link to="/create-listing">
+                            Create Listing
+                        </Link>
+                    </button>
+                    
                 </form>
                 <div className="flow-root mt-3">
                     <p className="float-left text-red-700" onClick={deleteProfileHandler}> Delete profile</p>

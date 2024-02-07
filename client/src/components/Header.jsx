@@ -45,9 +45,11 @@ export default function Header() {
                     </Link>
                     {
                         user.currentUser ? 
-                        <li onClick={signOutHandler} className="sm:inline text-slate-700">
-                            Logout
-                        </li>    
+                        <Link to="profile">
+                            <li className="sm:inline text-slate-700">
+                                Profile
+                            </li>
+                        </Link>    
                         : 
                         <Link to="sign-in">
                             <li className="sm:inline text-slate-700">
