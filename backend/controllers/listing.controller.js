@@ -33,3 +33,24 @@ export const createListing = async (req, res, next) => {
     }
     
 }
+
+export const getList = async (req, res, next) => {
+    try {
+        if(!req.params.id) return next(400, "Bad request");
+
+        const list = await ListingModel.findById(req.params.id);
+
+        if(list) {
+            return res.status(200).json({
+                success: true,
+                message: "Success",
+                data: list
+            });
+        } else {
+            next(errorHandler(404, "List not found"));
+        }
+    } catch(err) {
+        console.log(err);
+        next(errorHandler(500, "An error occured while fetching list"));
+    }
+}

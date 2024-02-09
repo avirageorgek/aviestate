@@ -1,6 +1,7 @@
 import {errorHandler} from "../util/error.js";
 import UserModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import Listing from "../models/listing.model.js";
 
 export const test = (req, res) => {
     return res.send("Test api");
@@ -58,7 +59,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const signOutUser = (req, res, next) => {
     if(req.user.id !== req.params.id) return next(errorHandler("You can only delete your own account"));
-    console.log("Signout user");
+
     try {
         res.clearCookie("access_token");
         return res.status(200).json({
@@ -69,5 +70,28 @@ export const signOutUser = (req, res, next) => {
     } catch(err) {
 
         next(errorHandler(500, "Failed to Sign out"));
+    }
+}
+
+export const getUserListings = async (req, res, next) => {
+    try {
+        if(req.params.id !== req.user.id) return next(errorHandler("You can only view your own listings"));
+
+        const {page, count} = req.query;
+
+        const listings = await Listing.find({
+            userRef: req.user.id
+        }, null, {
+            skip: page*count,
+            limit: count
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Success",
+            data: listings
+        });
+    } catch(err) {
+        next(errorHandler(500, "Failed to fetch listings"));
     }
 }

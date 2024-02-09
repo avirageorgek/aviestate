@@ -12,9 +12,9 @@ export const verifyToken = async (req, res, next) => {
         const {access_token} = req.cookies;
         var tokenStatus = jwt.verify(access_token, process.env.JWT_TOKEN_SECURITY_KEY);
         if(tokenStatus) {
-            console.log(tokenStatus);
+
             req.user = tokenStatus;
-            console.log(req.user);
+
             next();
         }
     } catch(err) {
