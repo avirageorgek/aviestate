@@ -6,12 +6,13 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import {app} from "../../firebase";
 import { useFormik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
 
     const user = useSelector((store) => store.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const fileRef = useRef(null);
     const [file, setFile] = useState(null);
     const [fileUploadProgress, setFileUploadProgress] = useState(null);
@@ -200,8 +201,11 @@ const Profile = () => {
                 </form>
                 <div className="flow-root mt-3">
                     <p className="float-left text-red-700" onClick={deleteProfileHandler}> Delete profile</p>
+                    
                     <p className="float-right text-red-700" onClick={signOutHandler}> SignOut</p>  
+                    
                 </div>
+                <p className="float-none text-green-700" onClick={() => {navigate("/listing")}}>View Listings</p>
                 
 
             </div>    

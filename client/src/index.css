@@ -11,3 +11,14 @@ body {
     height: 20px;
     width: 20px;
 } 
+
+.loader-holder {
+    position: fixed;
+    z-index: 99;
+    background-color: black;
+    min-height: 100vh;
+    min-width: 100vw;
+    top:0;
+    left:0;
+    opacity: 0.2;
+}

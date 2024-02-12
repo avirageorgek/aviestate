@@ -95,3 +95,20 @@ export const getUserListings = async (req, res, next) => {
         next(errorHandler(500, "Failed to fetch listings"));
     }
 }
+
+export const getListCount = async (req, res, next) => {
+    try {
+        if(req.params.id !== req.user.id) return next(errorHandler("You can only view your own listings"));
+
+        const count = await Listing.where({
+            userRef: req.user.id
+        }).countDocuments();
+        return res.status(200).send({
+            success: true,
+            message: "Success",
+            data: count
+        })
+    } catch(err) {
+        next(errorHandler(500, "Failed to get count"));
+    }
+}

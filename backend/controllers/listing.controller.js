@@ -54,3 +54,22 @@ export const getList = async (req, res, next) => {
         next(errorHandler(500, "An error occured while fetching list"));
     }
 }
+
+export const deleteList = async (req, res, next) => {
+    try {
+        const deleteStatus = await ListingModel.deleteOne({
+            userRef: req.user.id,
+            _id: req.params.id
+        });
+
+        return res.status(202).json({
+            success: true,
+            message:"Success"
+        });
+    } catch(err) {
+        return res.status(500).json({
+            success: false,
+            message:"Failed"
+        });
+    }
+}
