@@ -1,5 +1,4 @@
 const Pagination =(props) => {
-
     const pageControlList = [];
     for(let i=0; i < props.numOfPages; i++) {
         pageControlList.push(

@@ -84,6 +84,8 @@ export const getUserListings = async (req, res, next) => {
         }, null, {
             skip: page*count,
             limit: count
+        }).sort({
+            createdAt: -1
         });
 
         return res.status(200).json({

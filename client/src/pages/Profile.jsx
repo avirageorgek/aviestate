@@ -205,7 +205,10 @@ const Profile = () => {
                     <p className="float-right text-red-700" onClick={signOutHandler}> SignOut</p>  
                     
                 </div>
-                <p className="float-none text-green-700" onClick={() => {navigate("/listing")}}>View Listings</p>
+                <div className="grid justify-items-center">
+                    <a className="text-green-800 hover:cursor-pointer" onClick={() => {navigate("/listing")}}>View Listings</a>          
+                </div>
+                
                 
 
             </div>    

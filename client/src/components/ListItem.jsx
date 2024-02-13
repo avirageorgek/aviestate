@@ -6,7 +6,7 @@ const ListItem = (props) =>{
         await fetch(`/api/listing/${props.listItem._id}`, {
             method: "DELETE"
         })    
-        props.deleteHandler(props.listItem._id);
+        props.deleteHandler(props.id);
     }
 
     return (
