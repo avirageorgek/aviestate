@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import { PiCurrencyGbpFill } from "react-icons/pi";
@@ -12,7 +13,7 @@ export default function CreateListing() {
     const [dealType, setDealType] = useState("Rent");
     const [offer, setOffer] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [files, setFiles] = useState({ 
+    const [files, setFiles] = useState({
         imageUrls: [],
         uploadFiles: null
     });
