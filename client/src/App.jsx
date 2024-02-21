@@ -24,6 +24,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/create-listing" element={<CreateListing />}></Route>
+          <Route path="/update-listing/:listId" element={<CreateListing />}> </Route>
           <Route path="/listing" element={<Listing />}></Route>
         </Route>
       </Routes>
