@@ -12,7 +12,7 @@ export default function CreateListing() {
     const [dealType, setDealType] = useState("Rent");
     const [offer, setOffer] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [files, setFiles] = useState({
+    const [files, setFiles] = useState({ 
         imageUrls: [],
         uploadFiles: null
     });
