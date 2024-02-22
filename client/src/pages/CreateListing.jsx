@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import { PiCurrencyGbpFill } from "react-icons/pi";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { useSelector } from "react-redux"; 
 
 import {uploadImages} from "../utils/fileUploads"; 
 import * as Yup from 'yup';
@@ -19,6 +20,9 @@ export default function CreateListing() {
     });
     const navigate = useNavigate();
     const {listId} = useParams();
+    const user = useSelector((store) => {
+        return store.user;
+    });
     const [currentListing, setCurrentListing] = useState(null);
     useEffect(() => {
         try {
@@ -33,6 +37,7 @@ export default function CreateListing() {
                         
                         //setCurrentListing(result.data);
                         setFiles({...files, ["imageUrls"]: result.data.imageUrls});
+                        setOffer(result.data.offer);
                         setCurrentListing({
                             name: result.data.name,
                             description: result.data.description,
@@ -44,7 +49,7 @@ export default function CreateListing() {
                             parking: result.data.parking,
                             offer: result.data.offer,
                             regularPrice: result.data.regularPrice,
-                            discountPrice:0,
+                            discountPrice:result.data.discountPrice ? result.data.discountPrice: 0,
                             images: null,  
                         });
 
@@ -104,7 +109,7 @@ export default function CreateListing() {
             description: Yup.string()
               .max(1000, 'Must be 1000 characters or less')
               .required('Description is required'),
-            address: Yup.string().required('Required'),
+            address: Yup.string().required('Address Required'),
             bedrooms: Yup.number().required("Number of bedrooms is required"),
             bathrooms: Yup.number().required("Number of bath is required"),
             dealType: Yup.string().required(),
@@ -131,19 +136,31 @@ export default function CreateListing() {
                 if(files.imageUrls.length > 0) {
                     values.images = files.imageUrls;
                 }
-                console.log(values);
-                const createListResult = await fetch("/api/listing/create", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(values)
-                })
+                let createListResult = null;
+                if(listId) {
+                    values._id = listId;
+                    values.userId = user.currentUser._id;
+                    createListResult = await fetch(`/api/listing/${listId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(values)
+                    })
+                } else {
+                    createListResult = await fetch("/api/listing/create", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(values)
+                    })
+                }
+                
                 
                 const result = await createListResult.json();
-                console.log("Re", result);
                 if(result.success) {
-                    navigate("/");
+                    navigate("/listing");
                 } else {
                     setFormError(result.message);
                     return;
@@ -153,6 +170,7 @@ export default function CreateListing() {
             };
         }}
         >
+        {({ values, handleChange, handleSubmit, setValues, isSubmitting, dirty, isValid }) => (
             <main className="mx-auto max-w-4xl p-3 mt-7">
                 <h1 className="text-center font-semibold text-3xl mb-10">Create Listing</h1>
                 <Form className="w-full flex flex-col sm:flex-row gap-4">
@@ -346,13 +364,14 @@ export default function CreateListing() {
                        
                         {
                             listId ? 
-                            <button type="submit" disabled={files.imageUrls.length < 1 ? true: false} className="rounded-lg p-3 bg-green-700 text-white  disabled:opacity-80 disabled:cursor-not-allowed hover:opacity-50 cursor-pointer">Update List</button>
-                            :  <button type="submit" disabled={files.imageUrls.length < 1 ? true: false} className="rounded-lg p-3 bg-green-700 text-white  disabled:opacity-80 disabled:cursor-not-allowed hover:opacity-50 cursor-pointer" >Create List</button>
+                            <button type="submit" disabled={((files.imageUrls.length < 1 || !isValid) ? true: false)} className="rounded-lg p-3 bg-green-700 text-white  disabled:opacity-80 disabled:cursor-not-allowed hover:opacity-50 cursor-pointer">Update List</button>
+                            :  <button type="submit" disabled={((files.imageUrls.length < 1 || !isValid) ? true: false)} className="rounded-lg p-3 bg-green-700 text-white  disabled:opacity-80 disabled:cursor-not-allowed hover:opacity-50 cursor-pointer" >Create List</button>
                         }
                     
                     </div>    
                 </Form>
             </main>
+        )}
         </Formik>  
     );
     

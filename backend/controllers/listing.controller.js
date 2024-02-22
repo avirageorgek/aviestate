@@ -73,3 +73,52 @@ export const deleteList = async (req, res, next) => {
         });
     }
 }
+
+export const updateList = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const {_id, name, description, address, regularPrice, discountPrice = 0
+            , bathrooms, bedrooms, furnished, parking, dealType, offer, images =[], userId} = req.body;
+
+        if(id !== _id) next(errorHandler(500, "You are trying to update an inavlid list"));
+        
+        if(!name || !description || !address || !regularPrice
+            || !bathrooms || !bedrooms
+            || !dealType || images.length < 1 ) {
+                next(errorHandler(400, "Bad Request"));
+                return;
+        }
+        const checkIfExist = await ListingModel.findOne({
+            _id: id,
+            userRef: userId
+        });  
+
+        if(checkIfExist) {
+            const listingObj = {name, description, address, regularPrice, discountPrice
+                , bathrooms, bedrooms, furnished, parking, type: dealType, offer, imageUrls: images
+            };
+
+            const updateStatus = await ListingModel.findOneAndUpdate({
+                _id: id,
+                userRef: userId
+            }, listingObj, {
+                new: true
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Success",
+                data: updateStatus
+            });
+        } else {
+            next(errorHandler(404, "List is missing"));
+        }
+        
+        // const updateStatus = await ListingModel.findOneAndUpdate({_id: id}, {
+        //     name, description, address, regularPrice, discountPrice
+        //     , bathrooms, bedrooms, furnished, parking, type: dealType, offer, 
+        // });
+    } catch(err) {
+        next(errorHandler(500, "An error occured while fetching list"));
+    }
+}
