@@ -206,7 +206,7 @@ const Profile = () => {
                     
                 </div>
                 <div className="grid justify-items-center">
-                    <a className="text-green-800 hover:cursor-pointer" onClick={() => {navigate("/listing")}}>View Listings</a>          
+                    <a className="text-green-800 hover:cursor-pointer" onClick={() => {navigate("/listings")}}>View Listings</a>          
                 </div>
                 
                 

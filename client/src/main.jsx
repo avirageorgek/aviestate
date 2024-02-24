@@ -6,7 +6,10 @@ import './index.css'
 import {store, persistor} from './redux/store'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
-
+// import function to register Swiper custom elements
+import { register } from 'swiper/element/bundle';
+// register Swiper custom elements
+register();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

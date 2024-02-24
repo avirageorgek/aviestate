@@ -6,7 +6,7 @@ import {createListing, getList, deleteList, updateList} from "../controllers/lis
 const router = express.Router();
 
 router.post("/create", verifyToken, createListing);
-router.get("/:id", verifyToken, getList);
+router.get("/:id", getList);
 router.delete("/:id", verifyToken, deleteList);
 router.patch("/:id", verifyToken, updateList);
 

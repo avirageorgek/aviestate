@@ -3,7 +3,7 @@ import ListItem from "../components/ListItem";
 import {useSelector} from "react-redux"
 import Pagination from "../components/Pagination";
 
-const Listing = () => {
+const Listings = () => {
     const [userListings, setUserListings] = useState([]);
     const [listCount, setListCount] = useState(0);
     const [error, setError] = useState("");
@@ -105,4 +105,4 @@ const Listing = () => {
     );
 }
 
-export default Listing;
+export default Listings;
